@@ -3,7 +3,7 @@ var map = L.map('map').setView([51.505, -0.09], 13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
 var poopIcon = L.icon({
-    iconUrl: '../static/img/poop.png',
+    iconUrl: '/resources/static/img/poop.png',
     iconSize: [45, 45],
 });
 
