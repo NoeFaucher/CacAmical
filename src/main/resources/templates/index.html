@@ -1,11 +1,10 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>CacAmical</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 
 
-    <!-- Ajouter du CSS pour définir la taille de la carte -->
     <style>
     /* Définir la taille de la carte pour remplir toute la fenêtre */
     #map {
@@ -31,7 +30,7 @@
 
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
-<!--<script type="text/javascript" th:src="@{/js/leaflet.js}" />-->
+<script type="text/javascript" th:src="@{/js/leaflet.js}" />
 <script>
     var map = L.map('map').setView([51.505, -0.09], 13);
 
@@ -50,5 +49,17 @@
 
 
 </script>
+</body>
+</html> -->
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!-- this is where we refer the css file from src/main/resources/static/main.css -->
+    <link rel="stylesheet" th:src="@{/css/main.css}"/>
+</head>
+<body>
+    <h1 class="mt-1 text-xl" th:text="'Hello horld!'" />
 </body>
 </html>
