@@ -3,7 +3,7 @@
 <head>
     <title>CacAmical</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Ajouter du CSS pour définir la taille de la carte -->
     <style>
         /* Définir la taille de la carte pour remplir toute la fenêtre */
@@ -37,9 +37,9 @@
 <body>
 <div id="map"></div>
 
-<form id="pointForm" style="display: none;" action="/addPoint" method="POST">
+<form id="pointForm">
     <h3>Créer un nouveau point</h3>
-    <label for="latitude">Latitude:</label>
+    <label for="latitude">Latitude :</label>
     <input type="text" id="latitude" name="latitude" required><br>
 
     <label for="longitude">Longitude:</label>
@@ -48,7 +48,7 @@
     <label for="description">Description:</label>
     <input type="text" id="description" name="description"><br>
 
-    <button type="submit">Ajouter un point</button>
+    <button type="button" onclick="addPoint()">Ajouter un point</button>
 </form>
 
 
@@ -84,42 +84,49 @@
     });
 
     function addPoint() {
-        // Récupérez les données du formulaire et envoyez-les au serveur (vous devrez implémenter cette fonctionnalité côté serveur).
         var latitude = document.getElementById('latitude').value;
         var longitude = document.getElementById('longitude').value;
         var description = document.getElementById('description').value;
-        console.log(latitude+longitude+description);
 
-        // Créez un objet JSON avec les données à envoyer au serveur.
         var data = {
-            latitude: latitude,
             longitude: longitude,
+            latitude: latitude,
             description: description
-            // Ajoutez d'autres champs si nécessaire.
         };
-        var marker = L.marker([latitude,longitude], { icon: poopIcon }).addTo(map);
 
-
-        // Effectuez une requête AJAX pour envoyer les données au serveur et gérer la réponse.
-        // Vous devez mettre en œuvre cette partie côté serveur.
-        /*
+        // Utilisez AJAX pour envoyer les données au serveur
         $.ajax({
             type: "POST",
             url: "/addPoint",
             data: JSON.stringify(data),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
+            contentType: "application/json",
             success: function (response) {
-                alert("Point ajouté avec succès !");
-                // Vous pouvez masquer le formulaire après avoir ajouté le point.
-                var pointForm = document.getElementById("pointForm");
-                pointForm.style.display = "none";
+                // La réponse du serveur peut contenir un message ou des données supplémentaires, en fonction de votre implémentation côté serveur.
+                console.log(response);
+
+                // Mettez à jour la carte avec le nouveau point
+                var marker = L.marker([latitude, longitude], { icon: poopIcon }).addTo(map);
             },
             error: function (error) {
                 console.error(error);
             }
-        })*/
+        });
+        return false;
     }
+
+    // Fonction pour récupérer tous les points et les afficher sur la carte
+    function getAllPoints() {
+        $.get("/getPoints", function (data) {
+            data.forEach(function (point) {
+                var marker = L.marker([point.latitude, point.longitude], { icon: poopIcon }).addTo(map);
+            });
+        });
+    }
+
+    // Appelez la fonction pour récupérer et afficher les points lorsque la page est chargée
+    $(document).ready(function () {
+        getAllPoints();
+    });
 </script>
 </body>
 </html>
