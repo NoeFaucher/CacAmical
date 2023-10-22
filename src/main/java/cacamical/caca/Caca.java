@@ -10,6 +10,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.persistence.PrePersist;
+
 
 @Entity
 public class Caca {
@@ -18,8 +22,11 @@ public class Caca {
     @Column(name = "cacaId")
     private Long cacaId;
 
-    @Column(name = "pointGps")
-    private String pointGps;
+    @Column(name = "latitude")
+    private double latitude;
+
+    @Column(name = "longitude")
+    private double longitude;
 
     @Column(name = "description")
     private String description;
@@ -33,6 +40,7 @@ public class Caca {
     @Column(name = "titre")
     private String titre;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "dateAjout")
     private Date dateAjout;
 
@@ -46,8 +54,9 @@ public class Caca {
         // Default constructor
     }
 
-    public Caca(String pointGps, String description, int note, String photo, String titre, Date dateAjout, User user) {
-        this.pointGps = pointGps;
+    public Caca(Double latitude, Double longitude, String description, int note, String photo, String titre, Date dateAjout, User user) {
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.description = description;
         this.note = note;
         this.photo = photo;
@@ -66,14 +75,21 @@ public class Caca {
         this.cacaId = cacaId;
     }
 
-    public String getPointGps() {
-        return pointGps;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setPointGps(String pointGps) {
-        this.pointGps = pointGps;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
     public String getDescription() {
         return description;
     }
@@ -120,5 +136,10 @@ public class Caca {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @PrePersist
+    public void beforeSave() {
+        dateAjout = new Date();
     }
 }
