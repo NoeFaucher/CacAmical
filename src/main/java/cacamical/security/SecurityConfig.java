@@ -42,7 +42,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(antPathMatcher).permitAll()
-                .requestMatchers(mvcMatcherBuilder.pattern("/connexion"),mvcMatcherBuilder.pattern("/inscription")).permitAll()
+                .requestMatchers(mvcMatcherBuilder.pattern("/connexion"),mvcMatcherBuilder.pattern("/"),mvcMatcherBuilder.pattern("/inscription")).permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(loginConfigurer -> {
