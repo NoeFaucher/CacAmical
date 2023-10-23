@@ -76,6 +76,7 @@ function getAllPoints() {
                 <p><strong>Latitude:</strong> ${point.latitude}</p>
                 <p><strong>Longitude:</strong> ${point.longitude}</p>
                 <p><strong>Note:</strong> ${point.note}</p>
+                <button onclick="editPoint(${point.cacaId})">Modifier</button>
                 <button onclick="deletePoint(${point.cacaId})">Supprimer</button>
             `;
 
@@ -112,6 +113,36 @@ function deletePoint(cacaId) {
     });
 }
 
+// Fonction pour éditer un point
+function editPoint(cacaId) {
+    var newDescription = prompt("Entrez la nouvelle description :");
+    if (newDescription) {
+        var data = {
+            description: newDescription
+        };
+
+        $.ajax({
+            type: "PUT",
+            url: `/editPoint/${cacaId}`,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function (response) {
+                console.log(response);
+                // Rafraîchissez la carte pour refléter les modifications
+                map.eachLayer(function (layer) {
+                    if (layer instanceof L.Marker) {
+                        map.removeLayer(layer);
+                    }
+                });
+                // Réaffichez tous les points après la modification
+                getAllPoints();
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+}
 
 // Appelez la fonction pour récupérer et afficher les points lorsque la page est chargée
 $(document).ready(function () {

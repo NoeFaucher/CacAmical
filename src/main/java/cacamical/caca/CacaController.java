@@ -38,6 +38,19 @@ public class CacaController {
         }
     }
 
+    @PutMapping("/editPoint/{cacaId}")
+    public ResponseEntity<String> editPoint(@PathVariable Long cacaId, @RequestBody Caca updatedCaca) {
+        Optional<Caca> cacaOptional = cacaRepository.findById(cacaId);
+        if (cacaOptional.isPresent()) {
+            Caca caca = cacaOptional.get();
+            caca.setDescription(updatedCaca.getDescription());
+            cacaRepository.save(caca);
+            return ResponseEntity.ok("Point modifié avec succès.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
 
 
