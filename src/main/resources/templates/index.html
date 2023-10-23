@@ -4,129 +4,72 @@
     <title>CacAmical</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Ajouter du CSS pour définir la taille de la carte -->
-    <style>
-        /* Définir la taille de la carte pour remplir toute la fenêtre */
-        #map {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh; /* 100% de la hauteur de la fenêtre */
-            margin: 0;
-        }
-
-        /* Assurez-vous que le corps et le HTML remplissent toute la fenêtre */
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Style pour le formulaire */
-        #pointForm {
-            display: none; /* Masquer le formulaire par défaut */
-            position: absolute;
-            background-color: white;
-            padding: 20px;
-            z-index: 1000;
-        }
-    </style>
-    <!--link rel="stylesheet" href="../static/css/map.css" />-->
+    <link rel="stylesheet" href="/resources/static/css/map.css" />
 </head>
 <body>
+<!--TODO:
+    V   Séparer js et css dans des fichiers différents
+    -   Rajouter info manquant dans BDD (image)
+    -   Faire que les cacas soit cliquable
+    -   Bien centré le truc pour ajoute le caca
+    -   Liée caca avec User
+-->
 <div id="map"></div>
 
 <form id="pointForm">
     <h3>Créer un nouveau point</h3>
-    <label for="latitude">Latitude :</label>
+    <label for="titre">Titre :</label>
+    <input type="text" id="titre" name="titre" required><br>
+
+    <label for="latitude">Latitude :</label>
     <input type="text" id="latitude" name="latitude" required><br>
 
-    <label for="longitude">Longitude:</label>
+    <label for="longitude">Longitude :</label>
     <input type="text" id="longitude" name="longitude" required><br>
 
-    <label for="description">Description:</label>
+    <label for="description">Description :</label>
     <input type="text" id="description" name="description"><br>
+
+    <div class="rating">
+    <label>
+        <input type="radio" name="stars" class="note" value="1"/>
+        <span class="icon">💩</span>
+    </label>
+    <label>
+        <input type="radio" name="stars" class="note" value="2" />
+        <span class="icon">💩</span>
+        <span class="icon">💩</span>
+    </label>
+    <label>
+        <input type="radio" name="stars" class="note" value="3" />
+        <span class="icon">💩</span>
+        <span class="icon">💩</span>
+        <span class="icon">💩</span>
+    </label>
+    <label>
+        <input type="radio" name="stars" class="note" value="4" />
+        <span class="icon">💩</span>
+        <span class="icon">💩</span>
+        <span class="icon">💩</span>
+        <span class="icon">💩</span>
+    </label>
+    <label>
+        <input type="radio" name="stars" class="note" value="5" />
+        <span class="icon">💩</span>
+        <span class="icon">💩</span>
+        <span class="icon">💩</span>
+        <span class="icon">💩</span>
+        <span class="icon">💩</span>
+    </label>
+    </div>
 
     <button type="button" onclick="addPoint()">Ajouter un point</button>
 </form>
 
 
+
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="/resources/static/js/leaflet.js"></script>
 
-<script>
-    var map = L.map('map').setView([43.33, -0.36], 13);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
-    var poopIcon = L.icon({
-        iconUrl: '/resources/static/img/poop.png',
-        iconSize: [45, 45],
-    });
-
-    // Ajoutez un gestionnaire d'événements "click" sur la carte
-    map.on('click', function (e) {
-        var pointForm = document.getElementById("pointForm");
-        var latitudeInput = document.getElementById("latitude");
-        var longitudeInput = document.getElementById("longitude");
-
-
-        // Récupérez les coordonnées du point cliqué
-        var latitude = e.latlng.lat;
-        var longitude = e.latlng.lng;
-
-        // Pré-remplissez le formulaire avec les coordonnées
-        latitudeInput.value = latitude;
-        longitudeInput.value = longitude;
-
-        // Affichez le formulaire
-        pointForm.style.display = "block";
-    });
-
-    function addPoint() {
-        var latitude = document.getElementById('latitude').value;
-        var longitude = document.getElementById('longitude').value;
-        var description = document.getElementById('description').value;
-
-        var data = {
-            longitude: longitude,
-            latitude: latitude,
-            description: description
-        };
-
-        // Utilisez AJAX pour envoyer les données au serveur
-        $.ajax({
-            type: "POST",
-            url: "/addPoint",
-            data: JSON.stringify(data),
-            contentType: "application/json",
-            success: function (response) {
-                // La réponse du serveur peut contenir un message ou des données supplémentaires, en fonction de votre implémentation côté serveur.
-                console.log(response);
-
-                // Mettez à jour la carte avec le nouveau point
-                var marker = L.marker([latitude, longitude], { icon: poopIcon }).addTo(map);
-            },
-            error: function (error) {
-                console.error(error);
-            }
-        });
-        return false;
-    }
-
-    // Fonction pour récupérer tous les points et les afficher sur la carte
-    function getAllPoints() {
-        $.get("/getPoints", function (data) {
-            data.forEach(function (point) {
-                var marker = L.marker([point.latitude, point.longitude], { icon: poopIcon }).addTo(map);
-            });
-        });
-    }
-
-    // Appelez la fonction pour récupérer et afficher les points lorsque la page est chargée
-    $(document).ready(function () {
-        getAllPoints();
-    });
-</script>
 </body>
 </html>
