@@ -69,13 +69,14 @@ function getAllPoints() {
         data.forEach(function (point) {
             var marker = L.marker([point.latitude, point.longitude], { icon: poopIcon }).addTo(map);
 
-            // Créez un contenu de popup avec les informations du point
+            // Créez un contenu de popup avec les informations du point et un bouton de suppression
             var popupContent = `
                 <h3>${point.titre}</h3>
                 <p><strong>Description:</strong> ${point.description}</p>
                 <p><strong>Latitude:</strong> ${point.latitude}</p>
                 <p><strong>Longitude:</strong> ${point.longitude}</p>
                 <p><strong>Note:</strong> ${point.note}</p>
+                <button onclick="deletePoint(${point.cacaId})">Supprimer</button>
             `;
 
             // Ajoutez le popup au marqueur
@@ -88,6 +89,29 @@ function getAllPoints() {
         });
     });
 }
+
+// Fonction pour supprimer un point
+function deletePoint(cacaId) {
+    $.ajax({
+        type: "DELETE",
+        url: `/deletePoint/${cacaId}`,
+        success: function (response) {
+            console.log(response);
+            // Rafraîchissez la carte pour supprimer le marqueur
+            map.eachLayer(function (layer) {
+                if (layer instanceof L.Marker) {
+                    map.removeLayer(layer);
+                }
+            });
+            // Réaffichez tous les points après la suppression
+            getAllPoints();
+        },
+        error: function (error) {
+            console.error(error);
+        }
+    });
+}
+
 
 // Appelez la fonction pour récupérer et afficher les points lorsque la page est chargée
 $(document).ready(function () {
