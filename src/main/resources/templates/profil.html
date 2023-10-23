@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon profil</title>
+</head>
+<body>
+    <h1>Mon profil</h1>
+    <p>Id: <span th:text="${user.userId}"></span></p>
+    <p>Username: <span th:text="${user.username}"></span></p>
+    <p>Nom de famille: <span th:text="${user.nom}"></span></p>
+    <p>Prenom: <span th:text="${user.prenom}"></span></p>
+</body>
+</html>

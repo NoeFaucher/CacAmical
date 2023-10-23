@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <title>Page d'Inscription</title>
+</head>
+<body class="bg-gray-100 h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded shadow-md w-1/3">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-4">Inscription</h1>
+        <form th:action="@{/inscription}" method="post">
+            <div class="mb-4">
+                <label for="nom" class="block text-sm font-medium text-gray-600">Nom</label>
+                <input type="text" id="nom" name="nom" class="form-input" placeholder="Votre nom" required>
+            </div>
+            <div class="mb-4">
+                <label for="prenom" class="block text-sm font-medium text-gray-600">Prénom</label>
+                <input type="text" id="prenom" name="prenom" class="form-input" placeholder="Votre prénom" required>
+            </div>
+            <div class="mb-4">
+                <label for="username" class="block text-sm font-medium text-gray-600">Nom d'utilisateur</label>
+                <input type="text" id="username" name="username" class="form-input" placeholder="Choisissez un nom d'utilisateur" required>
+            </div>
+            <div class="mb-4">
+                <label for="password" class="block text-sm font-medium text-gray-600">Mot de passe</label>
+                <input type="password" id="password" name="password" class="form-input" placeholder="Choisissez un mot de passe" required>
+            </div>
+            <button type="submit" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600">S'Inscrire</button>
+        </form>
+        <p class="text-center text-gray-600 mt-4">Déjà un compte ? <a href="/connexion" class="text-blue-500">Se Connecter</a></p>
+    </div>
+</body>
+</html>

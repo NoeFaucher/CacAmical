@@ -29,6 +29,9 @@ public class User {
 
     @Column(name = "date_creation")
     private Date dateCreation;
+    
+    @Column(name = "username")
+    private String username;
 
     @Column(name = "password")
     private String password;
@@ -36,8 +39,8 @@ public class User {
     @ManyToMany
     @JoinTable(
         name = "user_amitie",
-        joinColumns = @JoinColumn(name = "userId"),
-        inverseJoinColumns = @JoinColumn(name = "amiId")
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "ami_id")
     )
     private Set<User> amis = new HashSet<>(); // Represents the friends of the user
 
@@ -86,6 +89,14 @@ public class User {
 
     public void setDateCreation(Date dateCreation) {
         this.dateCreation = dateCreation;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
