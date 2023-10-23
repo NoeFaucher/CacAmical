@@ -29,17 +29,17 @@ public class InscriptionConnexionControler {
     }
 
     @PostMapping("/inscription")
-    public ResponseEntity<String> createUser(User user) {
-        // User existingUser = userService.userRepository.findByUsername(user.getUsername()).get();
-        // if (existingUser != null) {
-        //     return ResponseEntity.badRequest().body("L'utilisateur existe déjà.");
-        // }
+    public String createUser(User user) {
+        Optional<User> userTest = userService.userRepository.findByUsername(user.getUsername());
+        if (userTest.isPresent()) {
+            return "redirect:/inscription?error";
+        }
 
         user.setPassword(SecurityConfig.passwordEncoder().encode(user.getPassword()));
 
         userService.registerUser(user);
     
-        return ResponseEntity.ok("L'utilisateur a été créé.");
+        return "redirect:/connexion";
     }
 
 }
