@@ -64,6 +64,44 @@ function addPoint() {
 }
 
 // Fonction pour récupérer tous les points et les afficher sur la carte
+function addPoint() {
+    var latitude = document.getElementById('latitude').value;
+    var longitude = document.getElementById('longitude').value;
+    var description = document.getElementById('description').value;
+    var titre = document.getElementById('titre').value;
+    var selectedRating = document.querySelector('input[name="stars"]:checked');
+    var note = selectedRating ? selectedRating.value : 0;
+    console.log(note);
+
+    var data = {
+        longitude: longitude,
+        latitude: latitude,
+        description: description,
+        titre: titre,
+        note: note
+    };
+
+    // Utilisez AJAX pour envoyer les données au serveur
+    $.ajax({
+        type: "POST",
+        url: "/addPoint",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        success: function (response) {
+            // La réponse du serveur peut contenir un message ou des données supplémentaires, en fonction de votre implémentation côté serveur.
+            console.log(response);
+
+            // Mettez à jour la carte avec le nouveau point
+            var marker = L.marker([latitude, longitude], { icon: poopIcon }).addTo(map);
+        },
+        error: function (error) {
+            console.error(error);
+        }
+    });
+    return false;
+}
+
+// Fonction pour récupérer tous les points et les afficher sur la carte
 function getAllPoints() {
     $.get("/getPoints", function (data) {
         data.forEach(function (point) {
@@ -108,7 +146,7 @@ function deletePoint(cacaId) {
             getAllPoints();
         },
         error: function (error) {
-            alert("Veuillez vous connecter pour supprimer !")
+            alert("Vous n'êtes pas autorisé à supprimer ce point ou veuillez vous connecter pour supprimer !");
             console.error(error);
         }
     });
@@ -139,7 +177,7 @@ function editPoint(cacaId) {
                 getAllPoints();
             },
             error: function (error) {
-                alert("Veuillez vous connecter pour modifier !")
+                alert("Vous n'êtes pas autorisé à modifier ce point ou veuillez vous connecter pour modifier !");
                 console.error(error);
             }
         });

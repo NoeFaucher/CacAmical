@@ -3,6 +3,7 @@ package cacamical.caca;
 import cacamical.user.User;
 import cacamical.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,7 @@ public class CacaController {
                 return ResponseEntity.badRequest().body("Utilisateur introuvable.");
             }
         } else {
-            return ResponseEntity.badRequest().body("Utilisateur non connecté.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Utilisateur non connecté.");
         }
     }
 
@@ -50,28 +51,55 @@ public class CacaController {
     }
 
     @DeleteMapping("/deletePoint/{cacaId}")
-    public ResponseEntity<String> deletePoint(@PathVariable Long cacaId) {
-        Optional<Caca> cacaOptional = cacaRepository.findById(cacaId);
-        if (cacaOptional.isPresent()) {
-            cacaRepository.delete(cacaOptional.get());
-            return ResponseEntity.ok("Caca supprimé avec succès.");
+    public ResponseEntity<String> deletePoint(@PathVariable Long cacaId, Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            Optional<Caca> cacaOptional = cacaRepository.findById(cacaId);
+
+            if (cacaOptional.isPresent()) {
+                Caca caca = cacaOptional.get();
+
+                // Vérifiez si l'utilisateur actuel est le propriétaire du point
+                if (caca.getUser() != null && caca.getUser().getUsername().equals(username)) {
+                    cacaRepository.delete(caca);
+                    return ResponseEntity.ok("Caca supprimé avec succès.");
+                } else {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Vous n'êtes pas autorisé à supprimer ce point.");
+                }
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Utilisateur non connecté.");
         }
     }
 
+
     @PutMapping("/editPoint/{cacaId}")
-    public ResponseEntity<String> editPoint(@PathVariable Long cacaId, @RequestBody Caca updatedCaca) {
-        Optional<Caca> cacaOptional = cacaRepository.findById(cacaId);
-        if (cacaOptional.isPresent()) {
-            Caca caca = cacaOptional.get();
-            caca.setDescription(updatedCaca.getDescription());
-            cacaRepository.save(caca);
-            return ResponseEntity.ok("Point modifié avec succès.");
+    public ResponseEntity<String> editPoint(@PathVariable Long cacaId, @RequestBody Caca updatedCaca, Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            Optional<Caca> cacaOptional = cacaRepository.findById(cacaId);
+
+            if (cacaOptional.isPresent()) {
+                Caca caca = cacaOptional.get();
+
+                // Vérifiez si l'utilisateur actuel est le propriétaire du point
+                if (caca.getUser() != null && caca.getUser().getUsername().equals(username)) {
+                    caca.setDescription(updatedCaca.getDescription());
+                    cacaRepository.save(caca);
+                    return ResponseEntity.ok("Point modifié avec succès.");
+                } else {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Vous n'êtes pas autorisé à modifier ce point.");
+                }
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Utilisateur non connecté.");
         }
     }
+
 
 }
 
