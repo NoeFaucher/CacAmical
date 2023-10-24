@@ -64,36 +64,59 @@ function addPoint() {
     return false;
 }
 
-// Fonction pour récupérer tous les points et les afficher sur la carte
+// Fonction pour récupérer le nombre de likes d'un point
+function getLikesCount(cacaId, callback) {
+    $.get(`/getLikes/${cacaId}`, function (count) {
+        callback(count);
+    });
+}
+
+// Fonction pour afficher tous les points sur la carte
 function getAllPoints() {
     $.get("/getPoints", function (data) {
         data.forEach(function (point) {
             var marker = L.marker([point.latitude, point.longitude], { icon: poopIcon }).addTo(map);
 
-            // Créez un contenu de popup avec les informations du point et un bouton de suppression
-            var popupContent = `
-                <h3>${point.titre}</h3>
-                <p><strong>Description:</strong> ${point.description}</p>
-                <p><strong>Latitude:</strong> ${point.latitude}</p>
-                <p><strong>Longitude:</strong> ${point.longitude}</p>
-                <p><strong>Note:</strong> ${point.note}</p>
-                <button onclick="editPoint(${point.cacaId})">Modifier</button>
-                <button onclick="deletePoint(${point.cacaId})">Supprimer</button>
-                <button class="like-button" onclick="likePoint(${point.cacaId})" data-caca-id="${point.cacaId}">
-                        <span class="like-count"></span> ❤️ Like            `;
+            // Créez un conteneur div pour le contenu de la popup
+            var popupContainer = document.createElement('div');
 
-            // Ajoutez le popup au marqueur
-            marker.bindPopup(popupContent);
+            // Utilisez la fonction pour obtenir le nombre de likes
+            getLikesCount(point.cacaId, function (count) {
+                // Créez un élément de texte pour afficher le nombre de likes
+                var likeCountText = document.createElement('span');
+                likeCountText.innerText = count;
 
-            // Définissez un gestionnaire d'événements pour ouvrir le popup au clic
-            marker.on('click', function () {
-                marker.openPopup();
+
+
+                // Créez le contenu de la popup avec les informations du point et les éléments ajoutés
+                var popupContent = `
+                    <h2>${point.titre}</h2>
+                    <p><strong>Description:</strong> ${point.description}</p>
+                    <p><strong>Latitude:</strong> ${point.latitude}</p>
+                    <p><strong>Longitude:</strong> ${point.longitude}</p>
+                    <p><strong>Note:</strong> ${point.note}</p>
+                    <button onclick="editPoint(${point.cacaId})">Modifier</button>
+                    <button onclick="deletePoint(${point.cacaId})">Supprimer</button>
+                    <button onclick="likePoint(${point.cacaId})"> ❤️ </button>                  
+                `;
+
+                // Ajoutez le contenu de la popup
+                popupContainer.innerHTML += popupContent;
+                // Ajoutez le texte du nombre de likes à la popup
+                popupContainer.appendChild(likeCountText);
+
+                // Créez la popup avec le contenu
+                marker.bindPopup(popupContainer);
+
+                // Définissez un gestionnaire d'événements pour ouvrir la popup au clic
+                marker.on('click', function () {
+                    marker.openPopup();
+                });
             });
-            updateLikeCount(point.cacaId);
-
         });
     });
 }
+
 
 // Fonction pour supprimer un point
 function deletePoint(cacaId) {
@@ -165,21 +188,6 @@ function likePoint(cacaId) {
         }
     });
 }
-
-// Fonction pour mettre à jour le nombre de likes à côté du bouton "Like"
-function updateLikeCount(cacaId) {
-    $.get(`/getLikes/${cacaId}`, function (likeCount) {
-        // Recherchez le bouton "Like" dans la popup du point
-        console.log("Like js Récupérés" + likeCount);
-        var likeButton = document.querySelector(`[data-caca-id="${cacaId}"] .like-button .like-count`);
-
-        if (likeButton) {
-            // Affichez le nombre de likes à côté du bouton
-            likeButton.innerHTML = likeCount;
-        }
-    });
-}
-
 
 // Appelez la fonction pour récupérer et afficher les points lorsque la page est chargée
 $(document).ready(function () {

@@ -10,4 +10,5 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     //Fonction qui a l'aide de SQL récupère le nombre de likes par "points"
     @Query("SELECT COUNT(l) FROM Like l WHERE l.caca = :caca")
     Integer countLikesByCaca(@Param("caca") Caca caca);
+
 }
