@@ -1,19 +1,10 @@
-/* Définir la taille de la carte pour remplir toute la fenêtre */
-#map {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh; /* 100% de la hauteur de la fenêtre */
-    margin: 0;
-}
 
 /* Assurez-vous que le corps et le HTML remplissent toute la fenêtre */
-html, body {
+/* html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-}
+} */
 
 /* Style pour le formulaire */
 #pointForm {

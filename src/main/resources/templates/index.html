@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/resources/static/css/map.css" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="flex flex-col min-h-screen">
 <!--TODO:
     V   Séparer js et css dans des fichiers différents
     -   Rajouter info manquant dans BDD (image)
@@ -25,19 +25,19 @@
             </div>
 
             <div>
-                <button class="bg-white text-blue-500 px-4 py-2 rounded-full text-sm font-semibold" sec:authorize="isAnonymous()">
+                <button class="bg-white text-blue-500 px-4 py-2 rounded-full text-sm font-semibold" onclick="location.href='/connexion';"  sec:authorize="isAnonymous()">
                     Connexion
                 </button>
-                <button class="bg-white text-blue-500 px-4 py-2 rounded-full text-sm font-semibold" sec:authorize="isAuthenticated()">
+                <button class="bg-white text-blue-500 px-4 py-2 rounded-full text-sm font-semibold" onclick="location.href='/profil';" sec:authorize="isAuthenticated()">
                     Profil
                 </button>
-                <button class="bg-white text-blue-500 px-4 py-2 rounded-full text-sm font-semibold" sec:authorize="isAuthenticated()">
+                <button class="bg-white text-blue-500 px-4 py-2 rounded-full text-sm font-semibold" onclick="location.href='/logout';" sec:authorize="isAuthenticated()">
                     Deconnexion
                 </button>
             </div>
         </div>
     </header>
-    <div id="map"></div>
+    <div class="flex-1" id="map"></div>
 
     <form id="pointForm">
         <h3>Créer un nouveau point</h3>

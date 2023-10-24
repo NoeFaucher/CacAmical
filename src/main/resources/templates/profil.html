@@ -7,10 +7,9 @@
     <title>Mon profil</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="flex flex-col min-h-screen">
     <header class="bg-blue-500 py-4">
         <div class="container mx-auto flex justify-between items-center">
-            <!-- Logo on the left -->
             <div class="text-white text-2xl font-semibold">
                 CacAmical
             </div>
@@ -28,10 +27,12 @@
             </div>
         </div>
     </header>
-    <h1>Mon profil</h1>
-    <p>Id: <span th:text="${user.userId}"></span></p>
-    <p>Username: <span th:text="${user.username}"></span></p>
-    <p>Nom de famille: <span th:text="${user.nom}"></span></p>
-    <p>Prenom: <span th:text="${user.prenom}"></span></p>
+    <div class="flex-1">
+        <h1>Mon profil</h1>
+        <p>Id: <span th:text="${user.userId}"></span></p>
+        <p>Username: <span th:text="${user.username}"></span></p>
+        <p>Nom de famille: <span th:text="${user.nom}"></span></p>
+        <p>Prenom: <span th:text="${user.prenom}"></span></p>
+    </div>
 </body>
 </html>
