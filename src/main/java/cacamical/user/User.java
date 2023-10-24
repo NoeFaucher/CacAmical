@@ -8,10 +8,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 
 @Entity
 public class User {
@@ -27,6 +31,7 @@ public class User {
     @Column(name = "prenom")
     private String prenom;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_creation")
     private Date dateCreation;
     
@@ -53,10 +58,13 @@ public class User {
     public User(String nom, String prenom, Date dateCreation, String password) {
         this.nom = nom;
         this.prenom = prenom;
-        this.dateCreation = dateCreation;
         this.password = password;
     }
-
+    
+    @PrePersist
+    protected void onCreate() {
+        dateCreation = new Date();
+    }
     // Getters and setters for the fields
 
     public Long getUserId() {

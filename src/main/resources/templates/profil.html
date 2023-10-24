@@ -10,7 +10,7 @@
 <body class="flex flex-col min-h-screen">
     <header class="bg-blue-500 py-4">
         <div class="container mx-auto flex justify-between items-center">
-            <div class="text-white text-2xl font-semibold">
+            <div class="text-white text-2xl font-semibold cursor-pointer" onclick="location.href='/';">
                 CacAmical
             </div>
 
@@ -27,12 +27,39 @@
             </div>
         </div>
     </header>
-    <div class="flex-1">
-        <h1>Mon profil</h1>
-        <p>Id: <span th:text="${user.userId}"></span></p>
-        <p>Username: <span th:text="${user.username}"></span></p>
-        <p>Nom de famille: <span th:text="${user.nom}"></span></p>
-        <p>Prenom: <span th:text="${user.prenom}"></span></p>
+    <div class="flex-1 p-4 bg-white rounded-lg shadow-md">
+        <h1 class="text-2xl font-semibold mb-4">Mon Profil</h1>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <p class="text-gray-600">Username:</p>
+                <p class="text-lg font-semibold" th:text="${user.username}"></p>
+            </div>
+            <div>
+                <p class="text-gray-600">Nom de famille:</p>
+                <p class="text-lg font-semibold" th:text="${user.nom}"></p>
+            </div>
+            <div>
+                <p class="text-gray-600">Prénom:</p>
+                <p class="text-lg font-semibold" th:text="${user.prenom}"></p>
+            </div>
+            <div>
+                <p class="text-gray-600">Date de création du compte:</p>
+                <p class="text-lg font-semibold" th:text="${user.dateCreation}"></p>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <h2 class="text-xl font-semibold mb-2">Amis:</h2>
+            <ul class="list-disc pl-5">
+                <li th:if="${user.amis.size() == 0}">
+                    Vous n'avez pas encore d'amis
+                </li>
+                <li th:each="ami : ${user.amis}">
+                    <span th:text="${ami.nom}"></span> <span th:text="${ami.prenom}"></span>
+                </li>
+            </ul>
+        </div>
     </div>
+
 </body>
 </html>
