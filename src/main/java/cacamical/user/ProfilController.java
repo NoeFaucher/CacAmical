@@ -20,7 +20,10 @@ public class ProfilController {
         String username = principal.getName();
         Optional<User> user = userRepository.findByUsername(username);
         
+
+
         if (user.isPresent()) {
+            System.out.println(user.get().getDateCreation());
             model.addAttribute("user", user.get());
             return "profil";
         } else {
