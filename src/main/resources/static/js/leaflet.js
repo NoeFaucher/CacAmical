@@ -68,6 +68,13 @@ function addPoint() {
     return false;
 }
 
+// Fonction pour récupérer le nombre de likes d'un point
+function getLikesCount(cacaId, callback) {
+    $.get(`/getLikes/${cacaId}`, function (count) {
+        callback(count);
+    });
+}
+
 // Fonction pour récupérer tous les points et les afficher sur la carte
 function getAllPoints() {
     $.get("/getPoints", function (data) {
@@ -75,34 +82,50 @@ function getAllPoints() {
             data.forEach(function (point) {
                 var marker = L.marker([point.latitude, point.longitude], { icon: poopIcon }).addTo(map);
 
-                // Créez un contenu de popup avec les informations du point et un bouton de suppression
-                var popupContent = `
-                    <h3>${point.titre}</h3>
-                    <p><strong>De:</strong> ${point.user.nom} ${point.user.prenom}</p>
-                    <p><strong>Description:</strong> ${point.description}</p>
-                    <p><strong>Latitude:</strong> ${point.latitude}</p>
-                    <p><strong>Longitude:</strong> ${point.longitude}</p>
-                    <p><strong>Note:</strong> ${point.note}</p>
-                `;
+                // Créez un conteneur div pour le contenu de la popup
+                var popupContainer = document.createElement('div');
 
-                if (userData.hasOwnProperty("userId") && point.user.userId == userData.userId) {
+                // Utilisez la fonction pour obtenir le nombre de likes
+                getLikesCount(point.cacaId, function (count) {
+                    // Créez un élément de texte pour afficher le nombre de likes
+                    var likeCountText = document.createElement('span');
+                    likeCountText.innerText = count;
+
+                    // Créez un contenu de popup avec les informations du point et un bouton de suppression
+                    var popupContent = `
+                        <h3>${point.titre}</h3>
+                        <p><strong>De:</strong> ${point.user.nom} ${point.user.prenom}</p>
+                        <p><strong>Description:</strong> ${point.description}</p>
+                        <p><strong>Latitude:</strong> ${point.latitude}</p>
+                        <p><strong>Longitude:</strong> ${point.longitude}</p>
+                        <p><strong>Note:</strong> ${point.note}</p>
+                    `;
+
+                    if (userData.hasOwnProperty("userId") && point.user.userId == userData.userId) {
+                        popupContent += `
+                        <button onclick="editPoint(${point.cacaId})">Modifier</button>
+                        <button onclick="deletePoint(${point.cacaId})">Supprimer</button>
+                        `
+                    }
                     popupContent += `
-                    <button onclick="editPoint(${point.cacaId})">Modifier</button>
-                    <button onclick="deletePoint(${point.cacaId})">Supprimer</button>
-                    ` 
-                }
+                        <button onclick="likePoint(${point.cacaId})"> ❤️ </button>   
+                        `;
 
-                // Ajoutez le popup au marqueur
-                marker.bindPopup(popupContent);
+                    // Ajoutez le contenu de la popup
+                    popupContainer.innerHTML += popupContent;
+                    // Ajoutez le texte du nombre de likes à la popup
+                    popupContainer.appendChild(likeCountText);
 
-                // Définissez un gestionnaire d'événements pour ouvrir le popup au clic
-                marker.on('click', function () {
-                    marker.openPopup();
+                    // Créez la popup avec le contenu
+                    marker.bindPopup(popupContainer);
+
+                    // Définissez un gestionnaire d'événements pour ouvrir la popup au clic
+                    marker.on('click', function () {
+                        marker.openPopup();
+                    });
                 });
             });
-
         });
-
     });
 }
 
@@ -159,6 +182,22 @@ function editPoint(cacaId) {
             }
         });
     }
+}
+
+// Fonction pour gérer le "like" d'un point
+function likePoint(cacaId) {
+    $.ajax({
+        type: "POST",
+        url: `/addLike/${cacaId}`,
+        success: function (response) {
+            console.log(response);
+            // Mettez à jour l'interface utilisateur pour refléter que l'utilisateur a "aimé" le point (par exemple, en changeant la couleur du bouton)
+        },
+        error: function (error) {
+            alert("Vous devez être connecté pour aimer un point.");
+            console.error(error);
+        }
+    });
 }
 
 // Appelez la fonction pour récupérer et afficher les points lorsque la page est chargée

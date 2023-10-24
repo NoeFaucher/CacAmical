@@ -5,13 +5,7 @@ import java.util.Date;
 
 import cacamical.caca.Caca;
 import cacamical.user.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class Like {
@@ -28,6 +22,7 @@ public class Like {
     @JoinColumn(name = "cacaId")
     private Caca caca;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "likeDate")
     private Date likeDate;
 
@@ -73,5 +68,10 @@ public class Like {
 
     public void setLikeDate(Date likeDate) {
         this.likeDate = likeDate;
+    }
+
+    @PrePersist
+    public void beforeSave() {
+        likeDate = new Date();
     }
 }
