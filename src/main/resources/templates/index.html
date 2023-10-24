@@ -39,55 +39,168 @@
     </header>
     <div class="flex-1" id="map"></div>
 
-    <form id="pointForm">
-        <h3>Créer un nouveau point</h3>
-        <label for="titre">Titre :</label>
-        <input type="text" id="titre" name="titre" required><br>
+    <form id="pointForm" class="bg-white p-4 rounded-lg shadow-lg">
+        <div sec:authorize="isAuthenticated()">
+            <div class="mb-4">
+                <h3 class="text-xl font-semibold mb-2">Créer un nouveau point</h3>
+                <label for="titre" class="block text-sm font-medium text-gray-600">Titre :</label>
+                <input type="text" id="titre" name="titre" required
+                    class="w-full px-3 py-2 leading-5 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150 ease-in-out">
+            </div>
 
-        <label for="latitude">Latitude :</label>
-        <input type="text" id="latitude" name="latitude" required><br>
+            <div class="mb-4">
+                <label for="latitude" class="block text-sm font-medium text-gray-600">Latitude :</label>
+                <input type="text" id="latitude" name="latitude" required
+                    class="w-full px-3 py-2 leading-5 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150 ease-in-out">
+            </div>
 
-        <label for="longitude">Longitude :</label>
-        <input type="text" id="longitude" name="longitude" required><br>
+            <div class="mb-4">
+                <label for="longitude" class="block text-sm font-medium text-gray-600">Longitude :</label>
+                <input type="text" id="longitude" name="longitude" required
+                    class="w-full px-3 py-2 leading-5 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150 ease-in-out">
+            </div>
 
-        <label for="description">Description :</label>
-        <input type="text" id="description" name="description"><br>
+            <div class="mb-4">
+                <label for="description" class="block text-sm font-medium text-gray-600">Description :</label>
+                <input type="text" id="description" name="description"
+                    class="w-full px-3 py-2 leading-5 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150 ease-in-out">
+            </div>
+                
+            <div class="rating">
+                <label>
+                    <input type="radio" name="stars" class="note" value="1"/>
+                    <span class="icon">💩</span>
+                </label>
+                <label>
+                    <input type="radio" name="stars" class="note" value="2" />
+                    <span class="icon">💩</span>
+                    <span class="icon">💩</span>
+                </label>
+                <label>
+                    <input type="radio" name="stars" class="note" value="3" />
+                    <span class="icon">💩</span>
+                    <span class="icon">💩</span>
+                    <span class="icon">💩</span>
+                </label>
+                <label>
+                    <input type="radio" name="stars" class="note" value="4" />
+                    <span class="icon">💩</span>
+                    <span class="icon">💩</span>
+                    <span class="icon">💩</span>
+                    <span class="icon">💩</span>
+                </label>
+                <label>
+                    <input type="radio" name="stars" class="note" value="5" />
+                    <span class="icon">💩</span>
+                    <span class="icon">💩</span>
+                    <span class="icon">💩</span>
+                    <span class="icon">💩</span>
+                    <span class="icon">💩</span>
+                </label>
+            </div>
 
-        <div class="rating">
-        <label>
-            <input type="radio" name="stars" class="note" value="1"/>
-            <span class="icon">💩</span>
-        </label>
-        <label>
-            <input type="radio" name="stars" class="note" value="2" />
-            <span class="icon">💩</span>
-            <span class="icon">💩</span>
-        </label>
-        <label>
-            <input type="radio" name="stars" class="note" value="3" />
-            <span class="icon">💩</span>
-            <span class="icon">💩</span>
-            <span class="icon">💩</span>
-        </label>
-        <label>
-            <input type="radio" name="stars" class="note" value="4" />
-            <span class="icon">💩</span>
-            <span class="icon">💩</span>
-            <span class="icon">💩</span>
-            <span class="icon">💩</span>
-        </label>
-        <label>
-            <input type="radio" name="stars" class="note" value="5" />
-            <span class="icon">💩</span>
-            <span class="icon">💩</span>
-            <span class="icon">💩</span>
-            <span class="icon">💩</span>
-            <span class="icon">💩</span>
-        </label>
+            <button type="button" onclick="addPoint()"
+                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200 transition duration-150 ease-in-out">
+                Ajouter un point
+            </button>
         </div>
 
-        <button type="button" onclick="addPoint()">Ajouter un point</button>
+        <div>
+            <div sec:authorize="isAnonymous()" class="text-gray-600">
+                Veuillez vous connecter pour poser un caca. <a href="/connexion" class="text-blue-500">Connectez-vous!</a>
+            </div>
+        </div>
     </form>
+
+
+    <!-- <form id="pointForm">
+        <div sec:authorize="isAuthenticated()">
+            <h3>Créer un nouveau point</h3>
+            <label for="titre">Titre :</label>
+            <input type="text" id="titre" name="titre" required><br>
+
+            <label for="latitude">Latitude :</label>
+            <input type="text" id="latitude" name="latitude" required><br>
+
+            <label for="longitude">Longitude :</label>
+            <input type="text" id="longitude" name="longitude" required><br>
+
+            <label for="description">Description :</label>
+            <input type="text" id="description" name="description"><br>
+            
+            <div class="rating">
+            <label>
+                <input type="radio" name="stars" class="note" value="1"/>
+                <span class="icon">💩</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" class="note" value="2" />
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" class="note" value="3" />
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" class="note" value="4" />
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" class="note" value="5" />
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+            </label>
+            </div>
+
+            <div class="rating">
+            <label>
+                <input type="radio" name="stars" class="note" value="1"/>
+                <span class="icon">💩</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" class="note" value="2" />
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" class="note" value="3" />
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" class="note" value="4" />
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" class="note" value="5" />
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+                <span class="icon">💩</span>
+            </label>
+            </div>
+
+            <button type="button"  onclick="addPoint()">Ajouter un point</button>
+
+        </div>
+        <div sec:authorize="isAnonymous()">
+            Veuillez vous connecter pour poser un caca. <a href="/connexion">Connectez-vous!</a>
+        </div>
+    </form> -->
 
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="/resources/static/js/leaflet.js"></script>
