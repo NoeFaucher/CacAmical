@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <title>CacAmical</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="/resources/static/css/map.css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
 <!--TODO:
@@ -16,61 +17,77 @@
     -   Rajouter plus d'info dans API Put
     -   Regarder cette histoire de <link rel="stylesheet" th:src="@{/css/map.css}"/>
 -->
-<div id="map"></div>
+    <header class="bg-blue-500 py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <!-- Logo on the left -->
+            <div class="text-white text-2xl font-semibold">
+                CacAmical
+            </div>
 
-<form id="pointForm">
-    <h3>Créer un nouveau point</h3>
-    <label for="titre">Titre :</label>
-    <input type="text" id="titre" name="titre" required><br>
+            <div>
+                <button class="bg-white text-blue-500 px-4 py-2 rounded-full text-sm font-semibold" sec:authorize="isAnonymous()">
+                    Connexion
+                </button>
+                <button class="bg-white text-blue-500 px-4 py-2 rounded-full text-sm font-semibold" sec:authorize="isAuthenticated()">
+                    Profil
+                </button>
+                <button class="bg-white text-blue-500 px-4 py-2 rounded-full text-sm font-semibold" sec:authorize="isAuthenticated()">
+                    Deconnexion
+                </button>
+            </div>
+        </div>
+    </header>
+    <div id="map"></div>
 
-    <label for="latitude">Latitude :</label>
-    <input type="text" id="latitude" name="latitude" required><br>
+    <form id="pointForm">
+        <h3>Créer un nouveau point</h3>
+        <label for="titre">Titre :</label>
+        <input type="text" id="titre" name="titre" required><br>
 
-    <label for="longitude">Longitude :</label>
-    <input type="text" id="longitude" name="longitude" required><br>
+        <label for="latitude">Latitude :</label>
+        <input type="text" id="latitude" name="latitude" required><br>
 
-    <label for="description">Description :</label>
-    <input type="text" id="description" name="description"><br>
+        <label for="longitude">Longitude :</label>
+        <input type="text" id="longitude" name="longitude" required><br>
 
-    <div class="rating">
-    <label>
-        <input type="radio" name="stars" class="note" value="1"/>
-        <span class="icon">💩</span>
-    </label>
-    <label>
-        <input type="radio" name="stars" class="note" value="2" />
-        <span class="icon">💩</span>
-        <span class="icon">💩</span>
-    </label>
-    <label>
-        <input type="radio" name="stars" class="note" value="3" />
-        <span class="icon">💩</span>
-        <span class="icon">💩</span>
-        <span class="icon">💩</span>
-    </label>
-    <label>
-        <input type="radio" name="stars" class="note" value="4" />
-        <span class="icon">💩</span>
-        <span class="icon">💩</span>
-        <span class="icon">💩</span>
-        <span class="icon">💩</span>
-    </label>
-    <label>
-        <input type="radio" name="stars" class="note" value="5" />
-        <span class="icon">💩</span>
-        <span class="icon">💩</span>
-        <span class="icon">💩</span>
-        <span class="icon">💩</span>
-        <span class="icon">💩</span>
-    </label>
-    </div>
+        <label for="description">Description :</label>
+        <input type="text" id="description" name="description"><br>
 
-    <button type="button" onclick="addPoint()">Ajouter un point</button>
-</form>
+        <div class="rating">
+        <label>
+            <input type="radio" name="stars" class="note" value="1"/>
+            <span class="icon">💩</span>
+        </label>
+        <label>
+            <input type="radio" name="stars" class="note" value="2" />
+            <span class="icon">💩</span>
+            <span class="icon">💩</span>
+        </label>
+        <label>
+            <input type="radio" name="stars" class="note" value="3" />
+            <span class="icon">💩</span>
+            <span class="icon">💩</span>
+            <span class="icon">💩</span>
+        </label>
+        <label>
+            <input type="radio" name="stars" class="note" value="4" />
+            <span class="icon">💩</span>
+            <span class="icon">💩</span>
+            <span class="icon">💩</span>
+            <span class="icon">💩</span>
+        </label>
+        <label>
+            <input type="radio" name="stars" class="note" value="5" />
+            <span class="icon">💩</span>
+            <span class="icon">💩</span>
+            <span class="icon">💩</span>
+            <span class="icon">💩</span>
+            <span class="icon">💩</span>
+        </label>
+        </div>
 
-
-<a href="/logout">Deconnexion</a>
-<a href="/profil">Profil</a>
+        <button type="button" onclick="addPoint()">Ajouter un point</button>
+    </form>
 
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="/resources/static/js/leaflet.js"></script>

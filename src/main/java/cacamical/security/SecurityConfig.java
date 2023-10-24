@@ -13,10 +13,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
+
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
-
+    
 
     UserDetailsService myUserDetailsService() {
         return new MyUserDetailsService();
