@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
     <title>Mon profil</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
 </head>
@@ -15,13 +16,13 @@
             </div>
 
             <div>
-                <button class="bg-white text-blue-500 px-4 py-2 rounded-full text-sm font-semibold" sec:authorize="isAnonymous()">
+                <button class="bg-white text-blue-500 px-4 py-2 rounded-full text-sm font-semibold" onclick="location.href='/connexion';"  sec:authorize="isAnonymous()">
                     Connexion
                 </button>
-                <button class="bg-white text-blue-500 px-4 py-2 rounded-full text-sm font-semibold" sec:authorize="isAuthenticated()">
+                <button class="bg-white text-blue-500 px-4 py-2 rounded-full text-sm font-semibold" onclick="location.href='/profil';" sec:authorize="isAuthenticated()">
                     Profil
                 </button>
-                <button class="bg-white text-blue-500 px-4 py-2 rounded-full text-sm font-semibold" sec:authorize="isAuthenticated()">
+                <button class="bg-white text-blue-500 px-4 py-2 rounded-full text-sm font-semibold" onclick="location.href='/logout';" sec:authorize="isAuthenticated()">
                     Deconnexion
                 </button>
             </div>
