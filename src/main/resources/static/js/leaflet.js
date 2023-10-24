@@ -13,6 +13,10 @@ map.on('click', function (e) {
     var latitudeInput = document.getElementById("latitude");
     var longitudeInput = document.getElementById("longitude");
 
+    if (!longitudeInput || !latitudeInput) {
+        pointForm.style.display = "block";
+        return;
+    }
 
     // Récupérez les coordonnées du point cliqué
     var latitude = e.latlng.lat;
@@ -67,28 +71,38 @@ function addPoint() {
 // Fonction pour récupérer tous les points et les afficher sur la carte
 function getAllPoints() {
     $.get("/getPoints", function (data) {
-        data.forEach(function (point) {
-            var marker = L.marker([point.latitude, point.longitude], { icon: poopIcon }).addTo(map);
+        $.get("/curUser", (userData) => {
+            data.forEach(function (point) {
+                var marker = L.marker([point.latitude, point.longitude], { icon: poopIcon }).addTo(map);
 
-            // Créez un contenu de popup avec les informations du point et un bouton de suppression
-            var popupContent = `
-                <h3>${point.titre}</h3>
-                <p><strong>Description:</strong> ${point.description}</p>
-                <p><strong>Latitude:</strong> ${point.latitude}</p>
-                <p><strong>Longitude:</strong> ${point.longitude}</p>
-                <p><strong>Note:</strong> ${point.note}</p>
-                <button onclick="editPoint(${point.cacaId})">Modifier</button>
-                <button onclick="deletePoint(${point.cacaId})">Supprimer</button>
-            `;
+                // Créez un contenu de popup avec les informations du point et un bouton de suppression
+                var popupContent = `
+                    <h3>${point.titre}</h3>
+                    <p><strong>De:</strong> ${point.user.nom} ${point.user.prenom}</p>
+                    <p><strong>Description:</strong> ${point.description}</p>
+                    <p><strong>Latitude:</strong> ${point.latitude}</p>
+                    <p><strong>Longitude:</strong> ${point.longitude}</p>
+                    <p><strong>Note:</strong> ${point.note}</p>
+                `;
 
-            // Ajoutez le popup au marqueur
-            marker.bindPopup(popupContent);
+                if (userData.hasOwnProperty("userId") && point.user.userId == userData.userId) {
+                    popupContent += `
+                    <button onclick="editPoint(${point.cacaId})">Modifier</button>
+                    <button onclick="deletePoint(${point.cacaId})">Supprimer</button>
+                    ` 
+                }
 
-            // Définissez un gestionnaire d'événements pour ouvrir le popup au clic
-            marker.on('click', function () {
-                marker.openPopup();
+                // Ajoutez le popup au marqueur
+                marker.bindPopup(popupContent);
+
+                // Définissez un gestionnaire d'événements pour ouvrir le popup au clic
+                marker.on('click', function () {
+                    marker.openPopup();
+                });
             });
+
         });
+
     });
 }
 
