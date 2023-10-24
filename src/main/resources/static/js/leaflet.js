@@ -79,7 +79,8 @@ function getAllPoints() {
                 <p><strong>Note:</strong> ${point.note}</p>
                 <button onclick="editPoint(${point.cacaId})">Modifier</button>
                 <button onclick="deletePoint(${point.cacaId})">Supprimer</button>
-            `;
+                <button class="like-button" onclick="likePoint(${point.cacaId})" data-caca-id="${point.cacaId}">
+                        <span class="like-count"></span> ❤️ Like            `;
 
             // Ajoutez le popup au marqueur
             marker.bindPopup(popupContent);
@@ -88,6 +89,8 @@ function getAllPoints() {
             marker.on('click', function () {
                 marker.openPopup();
             });
+            updateLikeCount(point.cacaId);
+
         });
     });
 }
@@ -146,6 +149,37 @@ function editPoint(cacaId) {
         });
     }
 }
+
+// Fonction pour gérer le "like" d'un point
+function likePoint(cacaId) {
+    $.ajax({
+        type: "POST",
+        url: `/addLike/${cacaId}`,
+        success: function (response) {
+            console.log(response);
+            // Mettez à jour l'interface utilisateur pour refléter que l'utilisateur a "aimé" le point (par exemple, en changeant la couleur du bouton)
+        },
+        error: function (error) {
+            alert("Vous devez être connecté pour aimer un point.");
+            console.error(error);
+        }
+    });
+}
+
+// Fonction pour mettre à jour le nombre de likes à côté du bouton "Like"
+function updateLikeCount(cacaId) {
+    $.get(`/getLikes/${cacaId}`, function (likeCount) {
+        // Recherchez le bouton "Like" dans la popup du point
+        console.log("Like js Récupérés" + likeCount);
+        var likeButton = document.querySelector(`[data-caca-id="${cacaId}"] .like-button .like-count`);
+
+        if (likeButton) {
+            // Affichez le nombre de likes à côté du bouton
+            likeButton.innerHTML = likeCount;
+        }
+    });
+}
+
 
 // Appelez la fonction pour récupérer et afficher les points lorsque la page est chargée
 $(document).ready(function () {

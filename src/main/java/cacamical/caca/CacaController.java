@@ -22,6 +22,7 @@ public class CacaController {
 
     @PostMapping("/addPoint")
     public ResponseEntity<String> addPoint(@RequestBody Caca caca, Principal principal) {
+        // Vérifiez si l'utilisateur est connecté
         if (principal != null) {
             String username = principal.getName();
             // Recherchez l'utilisateur par son nom d'utilisateur (username)
