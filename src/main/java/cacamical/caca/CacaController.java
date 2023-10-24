@@ -1,9 +1,12 @@
 package cacamical.caca;
 
+import cacamical.user.User;
+import cacamical.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,12 +16,31 @@ public class CacaController {
     @Autowired
     private CacaRepository cacaRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @PostMapping("/addPoint")
-    public ResponseEntity<String> addPoint(@RequestBody Caca caca) {
-        cacaRepository.save(caca);
-        System.out.println("Caca ajouté avec succès!");
-        return ResponseEntity.ok("Caca ajouté avec succès!");
+    public ResponseEntity<String> addPoint(@RequestBody Caca caca, Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            // Recherchez l'utilisateur par son nom d'utilisateur (username)
+            Optional<User> userOptional = userRepository.findByUsername(username);
+
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                // Associez l'utilisateur au point Caca
+                caca.setUser(user);
+                cacaRepository.save(caca);
+                System.out.println("Caca ajouté avec succès!");
+                return ResponseEntity.ok("Caca ajouté avec succès!");
+            } else {
+                return ResponseEntity.badRequest().body("Utilisateur introuvable.");
+            }
+        } else {
+            return ResponseEntity.badRequest().body("Utilisateur non connecté.");
+        }
     }
+
 
     @GetMapping("/getPoints")
     public ResponseEntity<List<Caca>> getPoints() {
