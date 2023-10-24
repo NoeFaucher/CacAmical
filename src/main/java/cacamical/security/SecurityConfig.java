@@ -32,16 +32,20 @@ public class SecurityConfig {
 		MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
 
 
-        RequestMatcher antPathMatcher = new AntPathRequestMatcher("/h2-console/**");
+        RequestMatcher h2Console = new AntPathRequestMatcher("/h2-console/**");
+        RequestMatcher resources = new AntPathRequestMatcher("/resources/**");
 
         // A supprimer 
         http.csrf().disable();
         http.headers().frameOptions().disable();
+        // http.headers(headers -> headers
+        //     .frameOptions(frameOptions -> frameOptions.sameOrigin()));
 
 
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(antPathMatcher).permitAll()
+                .requestMatchers(resources).permitAll()
+                .requestMatchers(h2Console).permitAll()
                 .requestMatchers(mvcMatcherBuilder.pattern("/connexion"),mvcMatcherBuilder.pattern("/"),mvcMatcherBuilder.pattern("/inscription")).permitAll()
                 .anyRequest().authenticated()
             )
