@@ -108,6 +108,7 @@ function deletePoint(cacaId) {
             getAllPoints();
         },
         error: function (error) {
+            alert("Veuillez vous connecter pour supprimer !")
             console.error(error);
         }
     });
@@ -138,6 +139,7 @@ function editPoint(cacaId) {
                 getAllPoints();
             },
             error: function (error) {
+                alert("Veuillez vous connecter pour modifier !")
                 console.error(error);
             }
         });

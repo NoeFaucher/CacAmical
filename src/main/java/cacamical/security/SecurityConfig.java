@@ -34,8 +34,9 @@ public class SecurityConfig {
 
         RequestMatcher h2Console = new AntPathRequestMatcher("/h2-console/**");
         RequestMatcher resources = new AntPathRequestMatcher("/resources/**");
+        RequestMatcher getPoints = new AntPathRequestMatcher("/getPoints/**");
 
-        // A supprimer 
+        // A supprimer
         http.csrf().disable();
         http.headers().frameOptions().disable();
         // http.headers(headers -> headers
@@ -46,6 +47,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(resources).permitAll()
                 .requestMatchers(h2Console).permitAll()
+                    .requestMatchers(getPoints).permitAll()
                 .requestMatchers(mvcMatcherBuilder.pattern("/connexion"),mvcMatcherBuilder.pattern("/"),mvcMatcherBuilder.pattern("/inscription")).permitAll()
                 .anyRequest().authenticated()
             )
