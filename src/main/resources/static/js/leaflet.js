@@ -39,6 +39,9 @@ function addPoint() {
     var selectedRating = document.querySelector('input[name="stars"]:checked');
     var note = selectedRating ? selectedRating.value : 0;
     console.log(note);
+    var pointForm = document.getElementById("pointForm");
+
+    pointForm.style.display = "";
 
     var data = {
         longitude: longitude,
@@ -192,9 +195,8 @@ function likePoint(cacaId) {
         url: `/addLike/${cacaId}`,
         success: function (response) {
             console.log(response);
-            // Mettez à jour l'interface utilisateur pour refléter que l'utilisateur a "aimé" le point (par exemple, en changeant la couleur du bouton)
 
-            // Maintenant, mettez à jour le nombre de likes en appelant la fonction getLikesCount
+            // Met à jour le nombre de likes en appelant la fonction getLikesCount
             getLikesCount(cacaId, function (count) {
                 // Sélectionnez l'élément contenant le nombre de likes et mettez à jour son contenu
                 var likeCountElement = document.querySelector(`#like-count-${cacaId}`);
@@ -214,4 +216,9 @@ function likePoint(cacaId) {
 // Appelez la fonction pour récupérer et afficher les points lorsque la page est chargée
 $(document).ready(function () {
     getAllPoints();
+});
+
+document.getElementById('hideButton').addEventListener('click', function() {
+    var pointForm = document.getElementById('pointForm');
+    pointForm.style.display = 'none';
 });

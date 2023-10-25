@@ -8,12 +8,38 @@
 
 /* Style pour le formulaire */
 #pointForm {
-    display: none; /* Masquer le formulaire par défaut */
-    position: absolute;
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
     background-color: white;
     padding: 20px;
     z-index: 1000;
 }
+
+#hideButton {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+}
+
+#hideButton::before, #hideButton::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 20px;
+    background: black;
+}
+
+#hideButton::before {
+    transform: rotate(45deg);
+}
+
+#hideButton::after {
+    transform: rotate(-45deg);
+}
+
 
 /* For poop rating */
 .rating {

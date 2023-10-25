@@ -59,7 +59,6 @@ public class LikeController {
         Optional<Caca> caca = cacaRepository.findById(cacaId);
         if (caca.isPresent()) {
             Integer likeCount = likeRepository.countLikesByCaca(caca.get());
-            System.out.println("Like Récupérés" + likeCount);
             return ResponseEntity.ok(likeCount);
         }
         return ResponseEntity.notFound().build();
