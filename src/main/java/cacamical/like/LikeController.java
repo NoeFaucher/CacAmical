@@ -34,15 +34,25 @@ public class LikeController {
             Optional<Caca> caca = cacaRepository.findById(cacaId);
 
             if (user.isPresent() && caca.isPresent()) {
-                // Créez un nouveau like et associez-le à l'utilisateur et au point (caca)
-                Like newLike = new Like(user.get(), caca.get(), new Date());
-                likeRepository.save(newLike);
-                return ResponseEntity.ok("Like ajouté avec succès!");
+                // Vérifiez si l'utilisateur a déjà aimé ce point (caca)
+                Like existingLike = likeRepository.findByUserAndCaca(user.get(), caca.get());
+
+                if (existingLike != null) {
+                    // L'utilisateur a déjà aimé ce point, renvoyez un message approprié
+                    System.out.println("Vous avez déjà aimé ce point.");
+                    return ResponseEntity.badRequest().body("Vous avez déjà aimé ce point.");
+                } else {
+                    // L'utilisateur n'a pas encore aimé ce point, ajoutez le like
+                    Like newLike = new Like(user.get(), caca.get(), new Date());
+                    likeRepository.save(newLike);
+                    return ResponseEntity.ok("Like ajouté avec succès!");
+                }
             }
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Vous devez être connecté pour aimer un point.");
     }
+
 
     @GetMapping("/getLikes/{cacaId}")
     public ResponseEntity<Integer> getLikesCount(@PathVariable Long cacaId) {

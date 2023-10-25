@@ -89,6 +89,7 @@ function getAllPoints() {
                 getLikesCount(point.cacaId, function (count) {
                     // Créez un élément de texte pour afficher le nombre de likes
                     var likeCountText = document.createElement('span');
+                    likeCountText.id = `like-count-${point.cacaId}`; // Identifiant unique
                     likeCountText.innerText = count;
 
                     // Créez un contenu de popup avec les informations du point et un bouton de suppression
@@ -192,13 +193,23 @@ function likePoint(cacaId) {
         success: function (response) {
             console.log(response);
             // Mettez à jour l'interface utilisateur pour refléter que l'utilisateur a "aimé" le point (par exemple, en changeant la couleur du bouton)
+
+            // Maintenant, mettez à jour le nombre de likes en appelant la fonction getLikesCount
+            getLikesCount(cacaId, function (count) {
+                // Sélectionnez l'élément contenant le nombre de likes et mettez à jour son contenu
+                var likeCountElement = document.querySelector(`#like-count-${cacaId}`);
+                if (likeCountElement) {
+                    likeCountElement.innerText = count;
+                }
+            });
         },
         error: function (error) {
-            alert("Vous devez être connecté pour aimer un point.");
+            alert("Vous avez deja liker le points.");
             console.error(error);
         }
     });
 }
+
 
 // Appelez la fonction pour récupérer et afficher les points lorsque la page est chargée
 $(document).ready(function () {
