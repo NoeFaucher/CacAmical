@@ -96,7 +96,7 @@ function getAllPoints() {
                     likeCountText.id = `like-count-${point.cacaId}`; // Identifiant unique
                     likeCountText.innerText = count;
 
-                    // Créez un contenu de popup avec les informations du point et un bouton de suppression
+                    // Créez un contenu de popup avec les informations du point
                     var popupContent = `
                         <h3>${point.titre}</h3>
                         <p><strong>De:</strong> ${point.user.nom} ${point.user.prenom}</p>
@@ -106,10 +106,18 @@ function getAllPoints() {
                         <p><strong>Note:</strong> ${point.note}</p>
                     `;
 
+                    // Vérifiez s'il y a un chemin d'image
+                    if (point.photoPath) {
+                        // Ajoutez l'image à la popup
+                        popupContent += `
+                            <img src="resources/static/img/${point.photoPath}" alt="Image du point" class="point-image">
+                        `;
+                    }
+
                     if (userData.hasOwnProperty("userId") && point.user.userId == userData.userId) {
                         popupContent += `
-                        <button onclick="editPoint(${point.cacaId})">Modifier</button>
-                        <button onclick="deletePoint(${point.cacaId})">Supprimer</button>
+                            <button onclick="editPoint(${point.cacaId})">Modifier</button>
+                            <button onclick="deletePoint(${point.cacaId})">Supprimer</button>
                         `
                     }
                     popupContent += `
@@ -133,6 +141,7 @@ function getAllPoints() {
         });
     });
 }
+
 
 // Fonction pour supprimer un point
 function deletePoint(cacaId) {

@@ -34,7 +34,7 @@ public class Caca {
     @Column(name = "note")
     private int note;
 
-    @Column(name = "photoPath")
+    @Column(name = "photo")
     private String photoPath;
 
     @Column(name = "titre")

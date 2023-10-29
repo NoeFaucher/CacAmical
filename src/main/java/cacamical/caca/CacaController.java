@@ -2,13 +2,18 @@ package cacamical.caca;
 
 import cacamical.user.User;
 import cacamical.user.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.Principal;
@@ -26,53 +31,49 @@ public class CacaController {
     private UserRepository userRepository;
 
     @PostMapping("/addPoint")
-    public ResponseEntity<String> addPoint(@RequestParam("file") MultipartFile file, @RequestParam("caca") String cacaJson, Principal principal) {
+    public ResponseEntity<String> addPoint(@RequestParam(value = "file", required = false) MultipartFile file, @RequestParam("caca") String cacaJson, Principal principal) throws JsonProcessingException {
+        // Vous pouvez extraire les informations du point (caca) du JSON
+        // Par exemple, en utilisant ObjectMappercd  de Jackson
+        ObjectMapper objectMapper = new ObjectMapper();
+        Caca caca = objectMapper.readValue(cacaJson, Caca.class);
+
         // Vérifiez si l'utilisateur est connecté
         if (principal != null) {
-            try {
-                // Convertissez le JSON de caca en objet Caca
-                ObjectMapper objectMapper = new ObjectMapper();
-                Caca caca = objectMapper.readValue(cacaJson, Caca.class);
+            String username = principal.getName();
+            Optional<User> user = userRepository.findByUsername(username);
 
-                // Vérifiez si un fichier a été téléchargé
+            if (user.isPresent()) {
+                // Vérifiez si un fichier d'image a été fourni
                 if (file != null && !file.isEmpty()) {
-                    // Obtenez le chemin du répertoire où vous souhaitez stocker les fichiers
-                    String uploadDirectory = "/resources/static/img/uploadImg/";
+                    try {
+                        // Stockez le fichier de l'image dans un répertoire sur le serveur
+                        String fileName = "uploadImg/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
+                        String uploadDir = "src/main/resources/static/img/";
+                        File uploadPath = new File(uploadDir);
+                        if (!uploadPath.exists()) {
+                            uploadPath.mkdirs();
+                        }
+                        String filePath = uploadPath.getAbsolutePath() + File.separator + fileName;
+                        file.transferTo(new File(filePath));
 
-                    // Générez un nom de fichier unique pour éviter les conflits
-                    String fileName = UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
-
-                    // Créez le chemin complet du fichier
-                    String filePath = uploadDirectory + fileName;
-
-                    // Enregistrez le fichier sur le serveur
-                    Files.write(Paths.get(filePath), file.getBytes());
-
-                    // Stockez le chemin du fichier dans l'objet Caca
-                    caca.setPhotoPath(filePath);
-                }
-                String username = principal.getName();
-                // Recherchez l'utilisateur par son nom d'utilisateur (username)
-                Optional<User> userOptional = userRepository.findByUsername(username);
-
-                if (userOptional.isPresent()) {
-                    User user = userOptional.get();
-                    // Associez l'utilisateur au point Caca
-                    caca.setUser(user);
-                    cacaRepository.save(caca);
-                    System.out.println("Caca ajouté avec succès!");
-                    return ResponseEntity.ok("Caca ajouté avec succès!");
-                }
-                else {
-                    return ResponseEntity.badRequest().body("Utilisateur introuvable.");
+                        // Enregistrez le chemin du fichier de l'image dans la base de données
+                        caca.setPhotoPath(fileName);
+                    } catch (IOException e) {
+                        return ResponseEntity.badRequest().body("Erreur lors du téléchargement de l'image.");
+                    }
                 }
 
-            } catch (Exception e) {
-                return ResponseEntity.badRequest().body("Erreur lors de l'ajout du point.");
+                // Associez le point à l'utilisateur
+                caca.setUser(user.get());
+
+                // Enregistrez le point dans la base de données
+                cacaRepository.save(caca);
+
+                return ResponseEntity.ok("Point ajouté avec succès!");
             }
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Utilisateur non connecté.");
         }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Vous devez être connecté pour ajouter un point.");
     }
 
 
