@@ -38,25 +38,25 @@ function addPoint() {
     var titre = document.getElementById('titre').value;
     var selectedRating = document.querySelector('input[name="stars"]:checked');
     var note = selectedRating ? selectedRating.value : 0;
-    console.log(note);
-    var pointForm = document.getElementById("pointForm");
+    var photoInput = document.getElementById('photo');
 
-    pointForm.style.display = "";
-
-    var data = {
-        longitude: longitude,
+    var formData = new FormData();
+    formData.append('file', photoInput.files[0]); // Ajoutez le fichier photo au formulaire
+    formData.append('caca', JSON.stringify({
         latitude: latitude,
+        longitude: longitude,
         description: description,
         titre: titre,
         note: note
-    };
+    }));
 
     // Utilisez AJAX pour envoyer les données au serveur
     $.ajax({
         type: "POST",
         url: "/addPoint",
-        data: JSON.stringify(data),
-        contentType: "application/json",
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function (response) {
             // La réponse du serveur peut contenir un message ou des données supplémentaires, en fonction de votre implémentation côté serveur.
             console.log(response);
@@ -70,6 +70,7 @@ function addPoint() {
     });
     return false;
 }
+
 
 // Fonction pour récupérer le nombre de likes d'un point
 function getLikesCount(cacaId, callback) {

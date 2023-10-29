@@ -34,8 +34,8 @@ public class Caca {
     @Column(name = "note")
     private int note;
 
-    @Column(name = "photo")
-    private String photo;
+    @Column(name = "photoPath")
+    private String photoPath;
 
     @Column(name = "titre")
     private String titre;
@@ -54,12 +54,12 @@ public class Caca {
         // Default constructor
     }
 
-    public Caca(Double latitude, Double longitude, String description, int note, String photo, String titre, Date dateAjout, User user) {
+    public Caca(Double latitude, Double longitude, String description, int note, String photoPath, String titre, Date dateAjout, User user) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.description = description;
         this.note = note;
-        this.photo = photo;
+        this.photoPath = photoPath;
         this.titre = titre;
         this.user = user;
         this.dateAjout = dateAjout;
@@ -106,12 +106,12 @@ public class Caca {
         this.note = note;
     }
 
-    public String getPhoto() {
-        return photo;
+    public String getPhotoPath() {
+        return photoPath;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
     }
 
     public String getTitre() {
