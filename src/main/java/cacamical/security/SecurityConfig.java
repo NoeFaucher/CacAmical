@@ -37,6 +37,7 @@ public class SecurityConfig {
         RequestMatcher resources = new AntPathRequestMatcher("/resources/**");
         RequestMatcher getPoints = new AntPathRequestMatcher("/getPoints/**");
         RequestMatcher getLikes = new AntPathRequestMatcher("/getLikes/**");
+        RequestMatcher getComments = new AntPathRequestMatcher("/getComments/**");
 
 
         // A supprimer
@@ -52,6 +53,7 @@ public class SecurityConfig {
                 .requestMatchers(h2Console).permitAll()
                     .requestMatchers(getPoints).permitAll()
                     .requestMatchers(getLikes).permitAll()
+                    .requestMatchers(getComments).permitAll()
                     .requestMatchers(mvcMatcherBuilder.pattern("/connexion"),mvcMatcherBuilder.pattern("/"),mvcMatcherBuilder.pattern("/inscription")).permitAll()
                 .anyRequest().authenticated()
             )

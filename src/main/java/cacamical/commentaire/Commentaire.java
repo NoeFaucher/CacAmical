@@ -1,12 +1,6 @@
 package cacamical.commentaire;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
@@ -31,6 +25,7 @@ public class Commentaire {
     @Column(name = "contenu")
     private String contenu;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "dateAjout")
     private Date dateAjout;
 
@@ -87,5 +82,10 @@ public class Commentaire {
 
     public void setDateAjout(Date dateAjout) {
         this.dateAjout = dateAjout;
+    }
+
+    @PrePersist
+    public void beforeSave() {
+        dateAjout = new Date();
     }
 }

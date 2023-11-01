@@ -78,6 +78,13 @@ function getLikesCount(cacaId, callback) {
     });
 }
 
+// Fonction pour récupérer les commentaires d'un point
+function getComments(cacaId, callback) {
+    $.get(`/getComments/${cacaId}`, function (comments) {
+        callback(comments);
+    });
+}
+
 // Fonction pour récupérer tous les points et les afficher sur la carte
 function getAllPoints() {
     $.get("/getPoints", function (data) {
@@ -95,37 +102,60 @@ function getAllPoints() {
                     likeCountText.id = `like-count-${point.cacaId}`; // Identifiant unique
                     likeCountText.innerText = count;
 
-                    // Créez un contenu de popup avec les informations du point et un bouton de suppression
-                    var popupContent = `
-                        <h3>${point.titre}</h3>
-                        <p><strong>De:</strong> ${point.user.nom} ${point.user.prenom}</p>
-                        <p><strong>Description:</strong> ${point.description}</p>
-                        <p><strong>Latitude:</strong> ${point.latitude}</p>
-                        <p><strong>Longitude:</strong> ${point.longitude}</p>
-                        <p><strong>Note:</strong> ${point.note}</p>
-                    `;
+                    // Utilisez la fonction pour obtenir les commentaires
+                    getComments(point.cacaId, function (comments) {
+                        // Créez un élément de texte pour afficher les commentaires
+                        var commentsList = document.createElement('div');
+                        commentsList.className = 'comments-list';
 
-                    if (userData.hasOwnProperty("userId") && point.user.userId == userData.userId) {
-                        popupContent += `
-                        <button onclick="editPoint(${point.cacaId})">Modifier</button>
-                        <button onclick="deletePoint(${point.cacaId})">Supprimer</button>
-                        `
-                    }
-                    popupContent += `
-                        <button onclick="likePoint(${point.cacaId})"> ❤️ </button>   
+                        if (comments.length > 0) {
+                            commentsList.innerHTML = "<p></p><p><strong>Commentaires:</strong><br></p>";
+                            comments.forEach(function (comment) {
+                                commentsList.innerHTML += `<p><em>${comment.user.nom} ${comment.user.prenom}:</em> ${comment.contenu}</p>`;
+                            });
+                        }
+
+                        // Créez un champ de texte pour le commentaire
+                        var commentInput = document.createElement('input');
+                        commentInput.id = 'comment-text'
+                        commentInput.type = 'text';
+                        commentInput.placeholder = 'Ajouter un commentaire...';
+
+                        // Créez un contenu de popup avec les informations du point et un bouton de suppression
+                        var popupContent = `
+                            <h3>${point.titre}</h3>
+                            <p><strong>De:</strong> ${point.user.nom} ${point.user.prenom}</p>
+                            <p><strong>Description:</strong> ${point.description}</p>
+                            <p><strong>Latitude:</strong> ${point.latitude}</p>
+                            <p><strong>Longitude:</strong> ${point.longitude}</p>
+                            <p><strong>Note:</strong> ${point.note}</p>
                         `;
 
-                    // Ajoutez le contenu de la popup
-                    popupContainer.innerHTML += popupContent;
-                    // Ajoutez le texte du nombre de likes à la popup
-                    popupContainer.appendChild(likeCountText);
+                        if (userData.hasOwnProperty("userId") && point.user.userId == userData.userId) {
+                            popupContent += `
+                            <button onclick="editPoint(${point.cacaId})">Modifier</button>
+                            <button onclick="deletePoint(${point.cacaId})">Supprimer</button>
+                            <button onclick="addComment(${point.cacaId})">Commenter</button>
+                            `
 
-                    // Créez la popup avec le contenu
-                    marker.bindPopup(popupContainer);
+                        }
+                        popupContent += `
+                            <button onclick="likePoint(${point.cacaId})"> ❤️ </button>   
+                            `;
 
-                    // Définissez un gestionnaire d'événements pour ouvrir la popup au clic
-                    marker.on('click', function () {
-                        marker.openPopup();
+                        // Ajoutez le contenu de la popup
+                        popupContainer.innerHTML += popupContent;
+                        popupContainer.appendChild(likeCountText);
+                        popupContainer.appendChild(commentInput);
+                        popupContainer.appendChild(commentsList);
+
+                        // Créez la popup avec le contenu
+                        marker.bindPopup(popupContainer);
+
+                        // Définissez un gestionnaire d'événements pour ouvrir la popup au clic
+                        marker.on('click', function () {
+                            marker.openPopup();
+                        });
                     });
                 });
             });
@@ -207,6 +237,43 @@ function likePoint(cacaId) {
         },
         error: function (error) {
             alert("Vous avez deja liker le points.");
+            console.error(error);
+        }
+    });
+}
+
+// Fonction pour ajouter un commentaire
+function addComment(cacaId) {
+    var commentContent = document.getElementById('comment-text').value;
+
+    // Vérifiez si le commentaire n'est pas vide
+    if (commentContent.trim() === '') {
+        alert("Veuillez entrer un commentaire.");
+        return;
+    }
+
+    var data = {
+        contenu: commentContent
+    };
+
+    $.ajax({
+        type: "POST",
+        url: `/addComment/${cacaId}`,
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        success: function (response) {
+            console.log(response);
+            // Rafraîchissez la carte pour refléter les modifications
+            map.eachLayer(function (layer) {
+                if (layer instanceof L.Marker) {
+                    map.removeLayer(layer);
+                }
+            });
+            // Réaffichez tous les points après l'ajout du commentaire
+            getAllPoints();
+        },
+        error: function (error) {
+            alert("Erreur lors de l'ajout du commentaire.");
             console.error(error);
         }
     });
