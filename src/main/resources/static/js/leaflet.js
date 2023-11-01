@@ -111,7 +111,7 @@ function getAllPoints() {
                         if (comments.length > 0) {
                             commentsList.innerHTML = "<p></p><p><strong>Commentaires:</strong><br></p>";
                             comments.forEach(function (comment) {
-                                commentsList.innerHTML += `<p><em>${comment.user.nom} ${comment.user.prenom}:</em> ${comment.contenu}</p>`;
+                                commentsList.innerHTML += `<em>${comment.user.nom} ${comment.user.prenom}:</em> ${comment.contenu}<br/>`;
                             });
                         }
 
@@ -120,6 +120,15 @@ function getAllPoints() {
                         commentInput.id = 'comment-text'
                         commentInput.type = 'text';
                         commentInput.placeholder = 'Ajouter un commentaire...';
+                        commentInput.style.display = 'none';
+
+                        // Définissez un gestionnaire d'événements pour "keydown"
+                        commentInput.addEventListener('keydown', function (event) {
+                            if (event.key === 'Enter') {
+                                // Si la touche "Entrée" est pressée, appelez la fonction addComment avec l'ID approprié
+                                addComment(point.cacaId);
+                            }
+                        });
 
                         // Créez un contenu de popup avec les informations du point et un bouton de suppression
                         var popupContent = `
@@ -137,6 +146,7 @@ function getAllPoints() {
                             <button onclick="deletePoint(${point.cacaId})">Supprimer</button>
                             <button onclick="addComment(${point.cacaId})">Commenter</button>
                             `
+                            commentInput.style.display = 'block';
 
                         }
                         popupContent += `
@@ -278,7 +288,6 @@ function addComment(cacaId) {
         }
     });
 }
-
 
 // Appelez la fonction pour récupérer et afficher les points lorsque la page est chargée
 $(document).ready(function () {
