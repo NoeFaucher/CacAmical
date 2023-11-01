@@ -30,6 +30,55 @@ map.on('click', function (e) {
     pointForm.style.display = "block";
 });
 
+
+// Écoutez les frappes dans le champ d'adresse
+document.getElementById('addressInput').addEventListener('input', function () {
+    var address = this.value;
+
+    // Appelez la fonction pour obtenir des suggestions d'adresse
+    getAddressSuggestions(address);
+});
+
+// Fonction pour obtenir des suggestions d'adresse
+function getAddressSuggestions(address) {
+
+    // Utilisez l'API de géocodage en temps réel de Nominatim pour obtenir des suggestions d'adresse
+    $.get(`https://nominatim.openstreetmap.org/search?format=json&q=${address}&limit=5`, function (data) {
+        var suggestionsList = document.getElementById('suggestions');
+        suggestionsList.innerHTML = '';
+
+        if (data && data.length > 0) {
+            data.forEach(function (result) {
+                var suggestionItem = document.createElement('li');
+                suggestionItem.textContent = result.display_name;
+                suggestionItem.addEventListener('click', function () {
+                    // Lorsque l'utilisateur clique sur une suggestion, géocodez l'adresse et pré-remplissez le formulaire
+                    geocodeAndFillForm(result);
+                });
+                suggestionsList.appendChild(suggestionItem);
+            });
+        } else {
+            suggestionsList.innerHTML = '<li>Aucune suggestion trouvée</li>';
+        }
+    });
+}
+
+// Fonction pour géocoder l'adresse et pré-remplir le formulaire
+function geocodeAndFillForm(result) {
+    var latitude = parseFloat(result.lat);
+    var longitude = parseFloat(result.lon);
+
+    // Pré-remplissez le formulaire avec les coordonnées
+    document.getElementById("latitude").value = latitude;
+    document.getElementById("longitude").value = longitude;
+
+    // Affichez le formulaire
+    document.getElementById("pointForm").style.display = "block";
+
+    // Effacez les suggestions d'adresse
+    document.getElementById('suggestions').innerHTML = '';
+}
+
 // Fonction pour récupérer tous les points et les afficher sur la carte
 function addPoint() {
     var latitude = document.getElementById('latitude').value;
