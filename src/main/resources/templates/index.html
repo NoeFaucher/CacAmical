@@ -8,15 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="flex flex-col min-h-screen">
-<!--TODO:
-    V   Séparer js et css dans des fichiers différents
-    -   Rajouter info manquant dans BDD (image)
-    V   Faire que les cacas soit cliquable
-    -   Bien centré le truc pour ajoute le caca
-    -   Liée caca avec User
-    -   Rajouter plus d'info dans API Put
-    -   Regarder cette histoire de <link rel="stylesheet" th:src="@{/css/map.css}"/>
--->
     <header class="bg-blue-500 py-4">
         <div class="container mx-auto flex justify-between items-center">
             <!-- Logo on the left -->
@@ -114,96 +105,6 @@
             </div>
         </div>
     </form>
-
-
-    <!-- <form id="pointForm">
-        <div sec:authorize="isAuthenticated()">
-            <h3>Créer un nouveau point</h3>
-            <label for="titre">Titre :</label>
-            <input type="text" id="titre" name="titre" required><br>
-
-            <label for="latitude">Latitude :</label>
-            <input type="text" id="latitude" name="latitude" required><br>
-
-            <label for="longitude">Longitude :</label>
-            <input type="text" id="longitude" name="longitude" required><br>
-
-            <label for="description">Description :</label>
-            <input type="text" id="description" name="description"><br>
-            
-            <div class="rating">
-            <label>
-                <input type="radio" name="stars" class="note" value="1"/>
-                <span class="icon">💩</span>
-            </label>
-            <label>
-                <input type="radio" name="stars" class="note" value="2" />
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-            </label>
-            <label>
-                <input type="radio" name="stars" class="note" value="3" />
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-            </label>
-            <label>
-                <input type="radio" name="stars" class="note" value="4" />
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-            </label>
-            <label>
-                <input type="radio" name="stars" class="note" value="5" />
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-            </label>
-            </div>
-
-            <div class="rating">
-            <label>
-                <input type="radio" name="stars" class="note" value="1"/>
-                <span class="icon">💩</span>
-            </label>
-            <label>
-                <input type="radio" name="stars" class="note" value="2" />
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-            </label>
-            <label>
-                <input type="radio" name="stars" class="note" value="3" />
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-            </label>
-            <label>
-                <input type="radio" name="stars" class="note" value="4" />
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-            </label>
-            <label>
-                <input type="radio" name="stars" class="note" value="5" />
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-                <span class="icon">💩</span>
-            </label>
-            </div>
-
-            <button type="button"  onclick="addPoint()">Ajouter un point</button>
-
-        </div>
-        <div sec:authorize="isAnonymous()">
-            Veuillez vous connecter pour poser un caca. <a href="/connexion">Connectez-vous!</a>
-        </div>
-    </form> -->
 
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="/resources/static/js/leaflet.js"></script>
