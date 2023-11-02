@@ -31,14 +31,14 @@
 <div class="flex-1" id="map"></div>
 
 <div sec:authorize="isAuthenticated()">
-    <div >
+    <div class="fixed top-0 right-0 p-4 mt-16" id="addressSearch">
         <input type="text" id="addressInput" placeholder="Entrez une adresse" class="w-64 p-2 rounded-lg border border-gray-300">
-        <ul id="suggestions" class="mt-2 bg-white border border-gray-300 shadow-lg"></ul>
+        <ul id="suggestions" class="suggestions-list mt-2 bg-white border border-gray-300 shadow-lg"></ul>
     </div>
 </div>
 
 <div sec:authorize="isAnonymous()" class="text-gray-600">
-    <p id="addressInput">Veuillez vous connecter pour poser un caca. <a href="/connexion" class="text-blue-500">Connectez-vous!</a></p>
+        <p id="addressInput"><p>
 </div>
 
 

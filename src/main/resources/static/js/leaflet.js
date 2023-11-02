@@ -54,6 +54,8 @@ function getAddressSuggestions(address) {
                 suggestionItem.addEventListener('click', function () {
                     // Lorsque l'utilisateur clique sur une suggestion, géocodez l'adresse et pré-remplissez le formulaire
                     geocodeAndFillForm(result);
+                    document.getElementById("addressInput").value = "";
+                    document.getElementById("suggestions").innerHTML = "";
                 });
                 suggestionsList.appendChild(suggestionItem);
             });
@@ -79,6 +81,19 @@ function geocodeAndFillForm(result) {
     document.getElementById('suggestions').innerHTML = '';
 }
 
+// Fonction pour effacer les champs du formulaire
+function clearPointForm() {
+    document.getElementById('latitude').value = '';
+    document.getElementById('longitude').value = '';
+    document.getElementById('description').value = '';
+    document.getElementById('titre').value = '';
+    // Réinitialisez le champ de note (s'il existe)
+    var selectedRating = document.querySelector('input[name="stars"]:checked');
+    if (selectedRating) {
+        selectedRating.checked = false;
+    }
+}
+
 // Fonction pour récupérer tous les points et les afficher sur la carte
 function addPoint() {
     var latitude = document.getElementById('latitude').value;
@@ -87,7 +102,6 @@ function addPoint() {
     var titre = document.getElementById('titre').value;
     var selectedRating = document.querySelector('input[name="stars"]:checked');
     var note = selectedRating ? selectedRating.value : 0;
-    console.log(note);
     var pointForm = document.getElementById("pointForm");
 
     pointForm.style.display = "";
@@ -110,6 +124,9 @@ function addPoint() {
             // La réponse du serveur peut contenir un message ou des données supplémentaires, en fonction de votre implémentation côté serveur.
             console.log(response);
 
+            // Effacez les champs du formulaire après avoir ajouté le point
+            clearPointForm();
+
             // Mettez à jour la carte avec le nouveau point
             var marker = L.marker([latitude, longitude], { icon: poopIcon }).addTo(map);
         },
@@ -117,6 +134,7 @@ function addPoint() {
             console.error(error);
         }
     });
+
     return false;
 }
 

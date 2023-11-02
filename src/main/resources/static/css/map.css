@@ -6,6 +6,16 @@
     padding: 0;
 } */
 
+/* Style pour la recherche */
+#addressSearch {
+    z-index: 9999;
+}
+
+#suggestions {
+    max-width: 16rem; /* La même largeur que l'input */
+    overflow: hidden;
+}
+
 /* Style pour le formulaire */
 #pointForm {
     display: none;
