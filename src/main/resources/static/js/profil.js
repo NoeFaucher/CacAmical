@@ -61,8 +61,8 @@ function addFriend(userId,ele) {
         data: JSON.stringify({"friendId" : userId}),
         contentType: "application/json",
         success: function (response) {
-            alert(response)
-            console.log(ele);
+            // alert(response)
+            // console.log(ele);
 
             let nom = ele.children[0].children[0].innerHTML;
             let prenom = ele.children[0].children[1].innerHTML;
@@ -77,7 +77,7 @@ function addFriend(userId,ele) {
             
             let friendDiv = document.createElement('li');
             friendDiv.className = "mb-2 text-grey-600 cursor-pointer"
-            friendDiv.innerHTML = `<span>${nom}</span> <span class="ml-2">${prenom}</span>`;
+            friendDiv.innerHTML = `<span>${nom}</span> <span class="ml-2">${prenom}</span> <span class="italic text-grey-400">(clicker pour supprimer l'ami)</span>`;
             friendDiv.onclick = () => deleteFriend(userId,friendDiv);
 
             list.appendChild(friendDiv);
@@ -93,7 +93,7 @@ function deleteFriend(userId,ele) {
         data: JSON.stringify({"friendId" : userId}),
         contentType: "application/json",
         success: function (response) {
-            alert(response);
+            // alert(response);
             ele.parentElement.removeChild(ele)
             
         }

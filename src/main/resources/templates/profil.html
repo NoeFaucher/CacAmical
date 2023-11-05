@@ -66,7 +66,7 @@
                     Vous n'avez pas encore d'amis
                 </li>
                 <li th:each="ami : ${user.amis}" class="mb-2 text-grey-600 cursor-pointer" th:attr="onclick= |deleteFriend('${ami.userId}',this)|">
-                    <span  th:text="${ami.nom}" ></span> <span th:text="${ami.prenom}" class="ml-2"></span>
+                    <span  th:text="${ami.nom}" ></span> <span th:text="${ami.prenom}" class="ml-2"></span> <span class="italic text-grey-400">(clicker pour supprimer l'ami)</span>
                 </li>
             </ul>
         </div>
