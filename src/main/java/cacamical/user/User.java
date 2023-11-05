@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 public class User {
@@ -47,6 +49,7 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "ami_id")
     )
+    @JsonIgnore
     private Set<User> amis = new HashSet<>(); // Represents the friends of the user
 
     // Constructors, getters, and setters
@@ -122,4 +125,16 @@ public class User {
     public void setAmis(Set<User> amis) {
         this.amis = amis;
     }
+
+    public void addAmi(User friend) {
+        this.amis.add(friend);
+        friend.getAmis().add(this);
+    }
+    
+    public void removeAmi(User friend) {
+        this.amis.remove(friend);
+        friend.getAmis().remove(this);
+    }
+
+
 }

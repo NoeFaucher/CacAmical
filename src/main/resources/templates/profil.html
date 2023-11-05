@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
     <title>Mon profil</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
 </head>
@@ -48,18 +49,30 @@
             </div>
         </div>
 
-        <div class="mt-4">
-            <h2 class="text-xl font-semibold mb-2">Amis:</h2>
-            <ul class="list-disc pl-5">
-                <li th:if="${user.amis.size() == 0}">
+        <div class="mb-4 mt-5">
+            <h1 class="text-2xl font-semibold mb-4">Trouver de nouveaux amis</h1>
+            <div class="flex items-center">
+                <input type="text" id="find-friend-field" placeholder="Entrez le nom de votre nouvel ami" class="p-2 border rounded-l-lg w-full">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-r-lg">Chercher</button>
+            </div>
+            <div id="list-display">
+
+            </div>
+        </div>
+        <div>
+            <h1 class="text-2xl font-semibold mb-2">Amis</h1>
+            <ul class="list-disc pl-5" id="friend-list">
+                <li th:if="${user.amis.size() == 0}" class="text-gray-500" id="no-friend">
                     Vous n'avez pas encore d'amis
                 </li>
-                <li th:each="ami : ${user.amis}">
-                    <span th:text="${ami.nom}"></span> <span th:text="${ami.prenom}"></span>
+                <li th:each="ami : ${user.amis}" class="mb-2 text-grey-600 cursor-pointer" th:attr="onclick= |deleteFriend('${ami.userId}',this)|">
+                    <span  th:text="${ami.nom}" ></span> <span th:text="${ami.prenom}" class="ml-2"></span>
                 </li>
             </ul>
         </div>
     </div>
+    
 
+    <script src="/resources/static/js/profil.js"></script>
 </body>
 </html>

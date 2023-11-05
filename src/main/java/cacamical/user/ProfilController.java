@@ -25,6 +25,7 @@ public class ProfilController {
         if (user.isPresent()) {
             System.out.println(user.get().getDateCreation());
             model.addAttribute("user", user.get());
+
             return "profil";
         } else {
             return "redirect:/connexion";
