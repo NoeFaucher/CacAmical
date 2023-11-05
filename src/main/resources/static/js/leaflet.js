@@ -1,3 +1,4 @@
+// Affichage de la map avec leaflet
 var map = L.map('map').setView([43.33, -0.36], 13);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
