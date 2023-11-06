@@ -14,7 +14,7 @@ Cacamical is a mapping application that allows users to mark and share their fav
 
 Before running Cacamical, you need to have the following prerequisites:
 
-- **Java Development Kit (JDK)**: Make sure you have Java JDK 8 or higher installed on your system.
+- **Java Development Kit (JDK)**: Make sure you have Java JDK 17 or higher installed on your system.
 
 ## Getting Started
 
